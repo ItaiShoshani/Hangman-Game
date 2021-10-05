@@ -1,0 +1,307 @@
+def welcome_to_homescreen():
+    """Prints the opening screen welcoming the user and displaying
+    number of attempts"""
+    HANGMAN_LOGO = """
+    _    _
+   | |  | |
+   | |__| | __ _ _ __   __ _ _ __ ___   __ _ _ __
+   |  __  |/ _' | '_ \\ / _' | '_ ' _ \\ / _' | '_ \\
+   | |  | | (_| | | | | (_| | | | | | | (_| | | | |
+   |_|  |_|\\__,_|_| |_|\__, |_| |_| |_|\\__,_|_| |_|
+                        __/ |
+                       |___/
+    6
+    """
+    print(HANGMAN_LOGO)
+
+
+def choose_word():
+    """The function returns a word from an existing text file.
+    This function requests the user the enter a file name and then a number.
+    The file name is a string the path to the  text file that has words
+    separated by words.
+    The number is an integer representing a particular word's placement in
+    the file.
+    The function uses if and else statements to check if input types by
+    user is valid.
+    In case the input is invalid, it notifys the user and the code repeats
+    until user is correct.
+    When input is valid it's assigned to variable "next_one" for the string.
+    This is done the same for index for the integer.
+    Iteration is done over the lines of the file and a word is selected,
+    based on the position of the index.
+    :return: The result is a word taken from the file,
+    in accordance to the index.
+    :rtype: str
+    """
+
+    while True:
+        if True:
+            file_path = input("Enter a file name:")
+            next_one = open(file_path, 'r')
+            break
+        if False:
+            print("Sorry, what you entered is incorrect. Please try again")
+            continue
+
+    while True:
+        if True:
+            index = input("enter a number:")
+            index = int(index)
+            break
+        if ValueError:
+            print("Sorry, what you typed isn't a integer. Please try again")
+            continue
+    start_counting = 0
+    word_list = list()
+    start_limiting_tries = list()
+    for items in next_one:
+        seprated_words = items.split()
+        for word in seprated_words:
+            word_list.append(word)
+            if word not in start_limiting_tries:
+                start_counting += 1
+                start_limiting_tries.append(word)
+    next_one.close()
+    circular_tallying = index-1
+    if index > start_counting:
+
+        circular_tallying = (circular_tallying) % len(word_list)
+        # this allows counting in circles.
+    secret_word = start_limiting_tries[circular_tallying]
+    print("Let's start!")
+    return secret_word
+
+
+def print_hangman(num_of_tries):
+    """ This function prints the value from dict(HANGMAN_PHOTOS).
+    It receives an integer that is used as key in the dictionary,
+    to print back value.
+    :param num_of_tries: a key in the dictionary
+    :type num_of_tries: int
+    :return: None
+    """
+    HANGMAN_PHOTOS = {
+        0: """   x-------x   """,
+        1: """   x-------x
+   |
+   |
+   |
+   |
+   |""",
+        2: """   x-------x
+   |       |
+   |       0
+   |
+   |
+   |""",
+        3: """   x-------x
+   |       |
+   |       0
+   |       |
+   |
+   |""",
+        4: """   x-------x
+   |       |
+   |       0
+   |      /|\\
+   |
+   |""",
+        5: """   x-------x
+   |       |
+   |       0
+   |      /|\\
+   |      /
+   |""",
+        6: """   x-------x
+   |       |
+   |       0
+   |      /|\\
+   |      / \\
+   |"""
+    }
+    user_tries = HANGMAN_PHOTOS[num_of_tries]
+    print(user_tries)
+
+
+def blank_character(secret_word):
+    """Function prints out the length of secret_word through "_" string.
+    It calculates the length of the word.
+    Then it returns a string which is blank (and same length to the word)
+    using "_".
+    :param secret_word: dependednt on user input.
+    :type secret_word: str
+    :return: blanks_of_word
+    :rtype: str
+    """
+
+    length_of_word = len(secret_word)
+    blanks_of_word = ("_" * length_of_word)
+    return blanks_of_word
+
+
+def user_guessing_a_letter():
+    """Function requests user to type a letter.
+    This is done by displaying a message to type in a character.
+    This character will be returned to a lowercase letter.
+    :return: the character that was guessed.
+    :rtype: str
+    """
+
+    guessed_letter = input("guess_a_letter:")
+    guessed_letter = guessed_letter.lower()
+    return guessed_letter
+
+
+def check_valid_input(guessed_letter, old_letters_guessed):
+    """Function examines correctness of the input.
+    It receives a character and the list of letters the
+    user previously guessed.
+    It checks the length, language of letter and if it was guessed before.
+    :param guessed_letter: dependent on user guess.
+    :type guessed_letter: str
+    :param olf_letters_guessed: dependent on previous user guesses.
+    :type guessed_letter: list
+    :return: True - if input is valid. False - if not.
+    :rtype: bool
+    """
+
+    if (len(guessed_letter) >= 2) or (not guessed_letter.isalpha()) or (guessed_letter in old_letters_guessed):
+        return False
+    else:
+        return True
+
+
+def try_update_letter_guessed(guessed_letter, old_letters_guessed):
+    """Purpose of the function is to update the list of old letters guessed.
+    It incorporates check_valid_input() function to examine if the character
+    is incorrect or not guessed before.
+    In case it's false, an "X" is printed along with a sorted string made from
+    the old letters guessed.
+    :param guessed_letter: dependent on user input.
+    :type guessed_letter: str
+    :param old_letters_guessed: dependent on previous user inputs.
+    :type old_letters_guessed: list
+    :return: returns True if doesn't exist in list of old letters. Otherwise
+    returns False.
+    :rtype: bool
+    """
+
+    if check_valid_input(guessed_letter, old_letters_guessed) is True:
+        old_letters_guessed.append(guessed_letter)
+        return True
+    else:
+        print("X")
+        old_letters_guessed = sorted(old_letters_guessed)
+        print(" -> ".join(old_letters_guessed))
+        return False
+
+
+def secret_word_has_letter(guessed_letter, secret_word):
+    """Function checks if the guessed letter is in the secret word.
+    :param guessed_letter: dependent on user input.
+    :type guessed_letter: str
+    :param secret_word: dependent on user input.
+    :param secret_word: str
+    :return: returns True if guessed letter in secret word. Else
+    returns false.
+    :rtype: bool
+    """
+    if guessed_letter in secret_word:
+        return True
+    else:
+        print(":(")
+        return False
+
+
+def show_hidden_word(secret_word, old_letters_guessed):
+    """Function returns a string of underscores and letters.
+    :param secret_word: dependent on user input.
+    :type secret_word: str
+    :param old_letters_guessed: dependent on previous inputs by the user.
+    :type secret_word: list
+    :return: display the secret word to the player through a
+    lower-line structure.
+    :rtype: str
+    """
+    length_of_word = len(secret_word)
+    underscores_of_secret_word = "_" * length_of_word
+    correct_guesses = ""
+
+    for character in secret_word:
+        if character in old_letters_guessed:
+            correct_guesses = correct_guesses + character
+        else:
+            word_position = secret_word.find(character)
+            new_character = underscores_of_secret_word[word_position]
+            correct_guesses = correct_guesses + new_character
+    correct_guesses = ' '.join(correct_guesses)
+    return correct_guesses
+
+
+def check_win(secret_word, old_letters_guessed):
+    """Check that all words in the secret word are included in the list
+    of the old letters guessed.
+    :param secret_word: dependent on user input.
+    :type secret_word: str
+    :param old_letters_guessed: dependent on previous user inputs.
+    :type_secret_word: list
+    :return: Returns True if all letters guessed by the user are in the
+    secret word. Else it returns False.
+    :rtype: bool
+    """
+
+    count_of_word = 0
+    for letter in secret_word:
+        if letter in old_letters_guessed:
+            count_of_word = count_of_word + 1
+    if count_of_word == len(secret_word):
+        return True
+    else:
+        return False
+
+
+def main():
+    """Function prints the welcome screen, and then requests the player
+    to enter input.
+    First is the word.path file, and then the location index for a word
+    in the file.
+    User input will determine the secret word in the game.
+    Each round, the user types in a new character.
+    If use guesses correctly, the secret word is starting to unveil itself,
+    through underscores with the characters.
+    In case user entered an incorrect letter, he will be notified with a
+    ":(", or with an X and/or the previous letters with arrows inbetween.
+    In all cases of the aforementioned line, the hangman will show the
+    user progress, after each mistake will add length to the hangman itself.
+    If the player was able to guess all letter correctly - it prints out WIN.
+    If the player guessed six failed attempts - it prints out LOSE.
+    """
+    welcome_to_homescreen()
+    wrong_guess = 0
+    num_of_tries = 0
+    old_letters_guessed = list()
+    secret_word = choose_word()
+    print_hangman(num_of_tries)
+    blank_character(secret_word)
+    while wrong_guess in range(6):
+        guessed_letter = user_guessing_a_letter()
+        if try_update_letter_guessed(guessed_letter, old_letters_guessed) is True:
+            if secret_word_has_letter(guessed_letter, secret_word) is False:
+                wrong_guess += 1
+                num_of_tries += 1
+                print_hangman(num_of_tries)
+                print(show_hidden_word(secret_word, old_letters_guessed))
+            else:
+                print(show_hidden_word(secret_word, old_letters_guessed))
+                if check_win(secret_word, old_letters_guessed) is True:
+                    print("WIN")
+                    break
+    if wrong_guess == 6:
+        if check_win(secret_word, old_letters_guessed) is True:
+            print("WIN")
+        else:
+            print("LOSE")
+
+if __name__ == "__main__":
+    main()
